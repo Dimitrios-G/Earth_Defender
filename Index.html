@@ -2,7 +2,7 @@
 <html lang="el">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Υπερασπιστής της Γης</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
@@ -21,17 +21,21 @@
             text-shadow: 0 0 5px #00ff41;
         }
 
+        .game-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 95%;
+            max-width: 1200px;
+        }
+        
         canvas {
             border: 2px solid #00ff41;
             background: radial-gradient(circle at center, #001122 0%, #000000 100%);
             display: block;
             box-shadow: 0 0 50px rgba(0, 255, 65, 0.3);
-        }
-
-        .game-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            width: 100%;
+            height: auto;
         }
 
         .game-container {
@@ -39,6 +43,7 @@
             box-shadow: 0 0 30px #00ff41;
             border-radius: 10px;
             overflow: hidden;
+            width: 100%;
         }
 
         #gameTitleHeader {
@@ -47,15 +52,12 @@
             color: #fff;
             text-shadow: 0 0 20px #00ff41, 0 0 40px #00ff41;
             animation: pulse 2s ease-in-out infinite alternate;
+            text-align: center;
         }
 
         @keyframes pulse {
-            from {
-                text-shadow: 0 0 20px #00ff41, 0 0 40px #00ff41;
-            }
-            to {
-                text-shadow: 0 0 30px #00ff41, 0 0 60px #00ff41, 0 0 80px #00ff41;
-            }
+            from { text-shadow: 0 0 20px #00ff41, 0 0 40px #00ff41; }
+            to { text-shadow: 0 0 30px #00ff41, 0 0 60px #00ff41, 0 0 80px #00ff41; }
         }
 
         .hud {
@@ -78,6 +80,7 @@
             gap: 20px;
             align-items: center;
             pointer-events: all;
+            flex-wrap: wrap;
         }
 
         .hud-item {
@@ -91,21 +94,16 @@
             backdrop-filter: blur(5px);
         }
 
-        #livesContainer {
-            font-size: 24px;
-        }
-
-        #livesContainer::before {
-            content: "Ζωές:";
-            font-size: 18px;
-            padding-right: 5px;
-        }
-
+        #livesContainer { font-size: 24px; }
+        #livesContainer::before { content: "Ζωές:"; font-size: 18px; padding-right: 5px; }
+        
         .game-controls {
             margin-top: 20px;
             display: flex;
             gap: 15px;
             z-index: 12;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
         .game-controls button {
@@ -126,7 +124,7 @@
             transform: translateY(-2px);
             box-shadow: 0 5px 20px rgba(0, 255, 65, 0.7);
         }
-
+        
         .menu-container {
             position: absolute;
             top: 0;
@@ -143,48 +141,50 @@
             text-align: center;
             text-shadow: 0 0 10px #00ff41;
             backdrop-filter: blur(10px);
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        
+        .menu-content {
+            background: rgba(0,0,0,0.5);
+            border: 2px solid #00ff41;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: inset 0 0 20px rgba(0,255,65,0.2), 0 0 20px rgba(0,255,65,0.2);
         }
 
-        .menu-container h1 {
-            font-size: 2.5em;
-            margin-bottom: 30px;
-            color: #fff;
-            text-shadow: 0 0 20px #00ff41, 0 0 40px #00ff41;
-        }
-
-        .menu-container h2 {
-            font-size: 2em;
-            margin-bottom: 20px;
-            color: #fff;
-        }
-
-        .menu-container p {
-            font-size: 1.2em;
-            margin-bottom: 30px;
-            max-width: 600px;
-            line-height: 1.6;
-        }
-
+        .menu-container h1 { font-size: 2.5em; margin-bottom: 30px; color: #fff; text-shadow: 0 0 20px #00ff41, 0 0 40px #00ff41; }
+        .menu-container h2 { font-size: 2em; margin-bottom: 20px; color: #fff; }
+        .menu-container p { font-size: 1.2em; margin-bottom: 30px; max-width: 600px; line-height: 1.6; }
+        
         .menu-container button {
-            background: linear-gradient(45deg, #008000, #00b300);
+            background: #222;
             color: white;
             border: 2px solid #00ff41;
+            border-bottom: 5px solid #00802b;
+            border-right: 5px solid #00802b;
             padding: 15px 30px;
             margin: 10px;
             cursor: pointer;
             font-size: 1.1em;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 15px rgba(0, 255, 65, 0.5);
+            transition: all 0.1s ease-in-out;
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
             font-family: 'Press Start 2P', cursive;
             border-radius: 8px;
         }
 
         .menu-container button:hover {
-            background: linear-gradient(45deg, #00b300, #00ff41);
-            transform: scale(1.05) translateY(-2px);
-            box-shadow: 0 5px 25px rgba(0, 255, 65, 0.8);
+            background: #333;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 25px rgba(0, 255, 65, 0.5);
         }
 
+        .menu-container button:active {
+            transform: translateY(2px);
+            border-bottom: 2px solid #00802b;
+            border-right: 2px solid #00802b;
+        }
+        
         .menu-container input {
             background: rgba(0, 0, 0, 0.7);
             border: 2px solid #00ff41;
@@ -203,16 +203,12 @@
             box-shadow: 0 0 20px rgba(0, 255, 65, 0.7);
         }
 
-        .hidden {
-            display: none !important;
-        }
-
+        .hidden { display: none !important; }
+        
         .pause-overlay {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.9);
             display: flex;
             flex-direction: column;
@@ -223,7 +219,7 @@
             font-size: 2em;
             text-shadow: 0 0 10px #fff;
         }
-
+        
         .virtual-controls {
             position: absolute;
             bottom: 10px;
@@ -239,12 +235,11 @@
             background: linear-gradient(45deg, rgba(0, 255, 65, 0.3), rgba(0, 255, 65, 0.6));
             color: #fff;
             border: 2px solid #00ff41;
-            padding: 15px 25px;
             font-size: 1.5em;
             cursor: pointer;
             border-radius: 50%;
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -258,53 +253,25 @@
             border-color: #ff0041;
             box-shadow: 0 0 10px #ff0041;
             border-radius: 10px;
-            width: 120px;
+            width: 100px;
         }
 
-        .virtual-btn:active {
-            transform: scale(0.95);
-        }
-
-        #instructions p,
-        #instructions ul {
+        .virtual-btn:active { transform: scale(0.95); }
+        
+        #instructions p, #instructions ul {
             font-size: 1.1em;
             line-height: 1.6em;
             max-width: 600px;
             margin: 0 auto 20px;
             text-align: left;
         }
-
-        #instructions ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        #instructions li {
-            margin-bottom: 10px;
-        }
-
-        .score-list {
-            width: 90%;
-            max-width: 500px;
-            background: rgba(0, 0, 0, 0.7);
-            border: 2px solid #00ff41;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px #00ff41;
-            margin-bottom: 20px;
-        }
-
-        .score-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px dashed #008000;
-        }
-
-        .score-item:last-child {
-            border-bottom: none;
-        }
-
+        #instructions ul { list-style-type: none; padding: 0; }
+        #instructions li { margin-bottom: 10px; }
+        
+        .score-list { width: 90%; max-width: 500px; background: rgba(0,0,0,0.7); border: 2px solid #00ff41; padding: 20px; border-radius: 10px; box-shadow: 0 0 20px #00ff41; margin-bottom: 20px; }
+        .score-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #008000; }
+        .score-item:last-child { border-bottom: none; }
+        
         .weapon-indicator {
             position: absolute;
             top: 60px;
@@ -316,14 +283,31 @@
             font-size: 14px;
             color: #00ff41;
         }
-
+        
         footer {
-            margin-top: 20px;
+            margin-top: 15px;
             padding: 10px;
             font-size: 0.8em;
             color: rgba(0, 255, 65, 0.7);
             text-align: center;
             width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            #gameTitleHeader { font-size: 1.5em; margin-bottom: 10px; }
+            .hud { font-size: 12px; flex-direction: column; align-items: flex-start; gap: 5px; }
+            .hud .hud-left { flex-direction: column; align-items: flex-start; gap: 5px; }
+            .hud-item { padding: 3px 6px; gap: 5px; }
+            #livesContainer, #livesContainer::before { font-size: 12px; }
+            .weapon-indicator { font-size: 10px; top: 10px; }
+            .menu-container h1 { font-size: 1.8em; }
+            .menu-container h2 { font-size: 1.3em; }
+            .menu-container p { font-size: 0.9em; }
+        }
+
+        @media (max-width: 480px) {
+            #gameTitleHeader { font-size: 1.2em; }
+            .hud { font-size: 10px; }
         }
     </style>
 </head>
@@ -341,57 +325,71 @@
                 </div>
             </div>
             <div class="weapon-indicator hidden" id="weaponIndicator">Όπλο: <span id="weaponType">Κανονικό</span></div>
+            
             <div class="menu-container" id="mainMenu">
-                <h1>🛸 Υπερασπιστής της Γης 🛸</h1>
-                <button onclick="showNameInput()">Έναρξη Παιχνιδιού</button>
-                <button onclick="showInstructions()">Οδηγίες</button>
-                <button onclick="showHighScores()">High Scores/button>
+                <div class="menu-content">
+                    <h1>🛸 Υπερασπιστής της Γης 🛸</h1>
+                    <button onclick="showNameInput()">Έναρξη Παιχνιδιού</button>
+                    <button onclick="showInstructions()">Οδηγίες</button>
+                    <button onclick="showHighScores()">Υψηλά Σκορ</button>
+                </div>
             </div>
             <div class="menu-container hidden" id="nameInput">
-                <h2>Εισάγετε το Όνομά σας</h2>
-                <input type="text" id="playerName" placeholder="Το όνομά σας" maxlength="15">
-                <button onclick="startGame()">Έναρξη!</button>
-                <button onclick="showMainMenu()">Πίσω στο Μενού</button>
+                <div class="menu-content">
+                    <h2>Εισάγετε το Όνομά σας</h2>
+                    <input type="text" id="playerName" placeholder="Το όνομά σας" maxlength="15">
+                    <button onclick="startGame()">Έναρξη!</button>
+                    <button onclick="showMainMenu()">Πίσω στο Μενού</button>
+                </div>
             </div>
             <div class="menu-container hidden" id="instructions">
-                <h2>Οδηγίες</h2>
-                <p>Είστε πιλότος διαστημοπλοίου που υπερασπίζεται τη Γη! Καταστρέψτε όλα τα εχθρικά σκάφη σε κάθε επίπεδο για να προχωρήσετε.</p>
-                <ul>
-                    <li><strong>Κίνηση:</strong> Πλήκτρα 'Αριστερά/Δεξιά' ή 'A'/'D'</li>
-                    <li><strong>Πυροβολισμός:</strong> Πλήκτρο 'Spacebar'</li>
-                    <li><strong>Παύση:</strong> Πλήκτρο 'P'</li>
-                    <li><strong>Bonus:</strong> Συλλέξτε αυτά για ενίσχυση!
-                        <ul>
-                            <li><span style="color: #ff4d4d;">♥</span> <strong>Καρδιά:</strong> Σας δίνει επιπλέον ζωή</li>
-                            <li><span style="color: #ffff40;">★</span> <strong>Αστέρι:</strong> Προσθέτει 500 πόντους</li>
-                            <li><span style="color: #4d94ff;">⛨</span> <strong>Ασπίδα:</strong> Προσωρινή προστασία</li>
-                            <li><span style="color: #ff00ff;">W</span> <strong>Όπλο:</strong> Αναβαθμίζει το όπλο σας</li>
-                        </ul>
-                    </li>
-                </ul>
-                <button onclick="showMainMenu()">Πίσω στο Μενού</button>
+                <div class="menu-content">
+                    <h2>Οδηγίες</h2>
+                    <ul>
+                        <li><strong>Κίνηση:</strong> Πλήκτρα 'Αριστερά/Δεξιά' ή 'A'/'D'</li>
+                        <li><strong>Πυροβολισμός:</strong> Πλήκτρο 'Spacebar'</li>
+                        <li><strong>Παύση:</strong> Πλήκτρο 'P'</li>
+                        <li><strong>Bonus:</strong> Συλλέξτε αυτά για ενίσχυση!
+                            <ul>
+                                <li><span style="color: #ff4d4d;">♥</span> <strong>Καρδιά:</strong> Σας δίνει μία επιπλέον ζωή (μέχρι 6).</li>
+                                <li><span style="color: #ffff40;">★</span> <strong>Αστέρι:</strong> Προσθέτει 500 πόντους στο σκορ σας.</li>
+                                <li><span style="color: #4d94ff;">⛨</span> <strong>Ασπίδα:</strong> Παρέχει μία προσωρινή ασπίδα που απορροφά ζημιά.</li>
+                                <li><span style="color: #ff00ff;">W</span> <strong>Όπλο:</strong> Αναβαθμίζει το όπλο σας (Κανονικό → Διασποράς → Γρήγορο).</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <button onclick="showMainMenu()">Πίσω στο Μενού</button>
+                </div>
             </div>
             <div class="menu-container hidden" id="highScores">
-                <h2>High Scores</h2>
-                <div class="score-list" id="scoresList"></div>
-                <button onclick="clearHighScores()">Καθαρισμός Σκορ</button>
-                <button onclick="showMainMenu()">Πίσω στο Μενού</button>
+                <div class="menu-content">
+                    <h2>Υψηλά Σκορ</h2>
+                    <div class="score-list" id="scoresList"></div>
+                    <button onclick="clearHighScores()">Καθαρισμός Σκορ</button>
+                    <button onclick="showMainMenu()">Πίσω στο Μενού</button>
+                </div>
             </div>
+            
             <div class="pause-overlay hidden" id="pauseOverlay">
                 <div>ΠΑΥΣΗ</div>
                 <button onclick="pauseGame()" style="margin-top: 20px;">Συνέχεια</button>
             </div>
             <div class="menu-container hidden" id="gameOverOverlay">
-                <h2 style="color: #ff4d4d;">ΤΕΛΟΣ ΠΑΙΧΝΙΔΙΟΥ</h2>
-                <p>Το Σκορ σας: <span id="finalScoreDisplay">0</span></p>
-                <button onclick="returnToMenu()">Πίσω στο Μενού</button>
+                <div class="menu-content">
+                    <h2 style="color: #ff4d4d;">ΤΕΛΟΣ ΠΑΙΧΝΙΔΙΟΥ</h2>
+                    <p>Το Σκορ σας: <span id="finalScoreDisplay">0</span></p>
+                    <button onclick="returnToMenu()">Πίσω στο Μενού</button>
+                </div>
             </div>
             <div class="menu-container hidden" id="gameWonOverlay">
-                <h1 style="color: #ffff40;">🎉 ΝΙΚΗΣΑΤΕ! 🎉</h1>
-                <p>Υπερασπιστήκατε επιτυχώς τη Γη!</p>
-                <p>Τελικό Σκορ: <span id="finalWinScoreDisplay">0</span></p>
-                <button onclick="returnToMenu()">Πίσω στο Μενού</button>
+                <div class="menu-content">
+                    <h1 style="color: #ffff40;">🎉 ΝΙΚΗΣΑΤΕ! 🎉</h1>
+                    <p>Υπερασπιστήκατε επιτυχώς τη Γη!</p>
+                    <p>Τελικό Σκορ: <span id="finalWinScoreDisplay">0</span></p>
+                    <button onclick="returnToMenu()">Πίσω στο Μενού</button>
+                </div>
             </div>
+            
             <div class="virtual-controls hidden" id="virtualControls">
                 <button class="virtual-btn" id="leftBtn">←</button>
                 <button class="virtual-btn shoot-btn" id="shootBtn">ΠΥΡΑ</button>
@@ -428,29 +426,57 @@
 
         function initAudio() {
             if (!audioContext) {
-                try { audioContext = new (window.AudioContext || window.webkitAudioContext)(); }
-                catch (e) { isMuted = true; console.error("AudioContext not supported."); }
+                try {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                } catch (e) {
+                    isMuted = true;
+                    console.error("AudioContext not supported.");
+                }
             }
-            if (audioContext && audioContext.state === "suspended") { audioContext.resume(); }
+            if (audioContext && audioContext.state === "suspended") {
+                audioContext.resume();
+            }
         }
         
         function playSound(type) {
             if (isMuted || !audioContext) return;
-            const o = audioContext.createOscillator();
-            const t = audioContext.createGain();
-            o.connect(t); t.connect(audioContext.destination);
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
             let freq = 440, dur = 0.1, vol = 0.05;
             switch (type) {
-                case "shoot": o.type = "triangle"; freq = 800; break;
-                case "explosion": o.type = "sawtooth"; freq = 150; vol = 0.2; dur = 0.3; o.frequency.exponentialRampToValueAtTime(50, audioContext.currentTime + dur); break;
-                case "powerUp": o.type = "square"; freq = 400; vol = 0.15; dur = 0.2; o.frequency.exponentialRampToValueAtTime(800, audioContext.currentTime + dur); break;
-                case "playerHit": o.type = "sine"; freq = 200; vol = 0.3; dur = 0.4; o.frequency.exponentialRampToValueAtTime(100, audioContext.currentTime + dur); break;
+                case "shoot":
+                    oscillator.type = "triangle";
+                    freq = 800;
+                    break;
+                case "explosion":
+                    oscillator.type = "sawtooth";
+                    freq = 150;
+                    vol = 0.2;
+                    dur = 0.3;
+                    oscillator.frequency.exponentialRampToValueAtTime(50, audioContext.currentTime + dur);
+                    break;
+                case "powerUp":
+                    oscillator.type = "square";
+                    freq = 400;
+                    vol = 0.15;
+                    dur = 0.2;
+                    oscillator.frequency.exponentialRampToValueAtTime(800, audioContext.currentTime + dur);
+                    break;
+                case "playerHit":
+                    oscillator.type = "sine";
+                    freq = 200;
+                    vol = 0.3;
+                    dur = 0.4;
+                    oscillator.frequency.exponentialRampToValueAtTime(100, audioContext.currentTime + dur);
+                    break;
             }
-            o.frequency.setValueAtTime(freq, audioContext.currentTime);
-            t.gain.setValueAtTime(vol, audioContext.currentTime);
-            t.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + dur);
-            o.start();
-            o.stop(audioContext.currentTime + dur);
+            oscillator.frequency.setValueAtTime(freq, audioContext.currentTime);
+            gainNode.gain.setValueAtTime(vol, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + dur);
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + dur);
         }
 
         function createBackgroundMusic() {
@@ -531,45 +557,29 @@
                 switch (enemy.spriteType) {
                     case 0:
                         ctx.beginPath();
-                        ctx.moveTo(x, y + h / 2);
-                        ctx.lineTo(x + w / 4, y);
-                        ctx.lineTo(x + w / 2, y + h / 2);
-                        ctx.lineTo(x + 3 * w / 4, y);
-                        ctx.lineTo(x + w, y + h / 2);
-                        ctx.lineTo(x + 3 * w / 4, y + h);
-                        ctx.lineTo(x + w / 4, y + h);
-                        ctx.closePath();
-                        ctx.fill();
+                        ctx.moveTo(x, y + h / 2); ctx.lineTo(x + w / 4, y); ctx.lineTo(x + w / 2, y + h / 2);
+                        ctx.lineTo(x + 3 * w / 4, y); ctx.lineTo(x + w, y + h / 2); ctx.lineTo(x + 3 * w / 4, y + h);
+                        ctx.lineTo(x + w / 4, y + h); ctx.closePath(); ctx.fill();
                         break;
                     case 1:
                         ctx.beginPath();
-                        ctx.arc(x + w / 2, y + h / 2, w / 2, Math.PI, 2 * Math.PI);
-                        ctx.lineTo(x + w, y + h);
-                        ctx.lineTo(x + 3 * w / 4, y + h * .8);
-                        ctx.lineTo(x + w / 2, y + h);
-                        ctx.lineTo(x + w / 4, y + h * .8);
-                        ctx.lineTo(x, y + h);
-                        ctx.closePath();
-                        ctx.fill();
+                        ctx.arc(x + w / 2, y + h / 2, w / 2, Math.PI, 2 * Math.PI); ctx.lineTo(x + w, y + h);
+                        ctx.lineTo(x + 3 * w / 4, y + h * .8); ctx.lineTo(x + w / 2, y + h); ctx.lineTo(x + w / 4, y + h * .8);
+                        ctx.lineTo(x, y + h); ctx.closePath(); ctx.fill();
                         break;
                     case 2:
                         ctx.beginPath();
-                        ctx.moveTo(x, y + h / 2);
-                        ctx.quadraticCurveTo(x + w / 2, y, x + w, y + h / 2);
-                        ctx.quadraticCurveTo(x + w / 2, y + h, x, y + h / 2);
-                        ctx.fill();
-                        ctx.fillRect(x - w * .1, y + h * .6, w * .2, h * .2);
-                        ctx.fillRect(x + w * .9, y + h * .6, w * .2, h * .2);
+                        ctx.moveTo(x, y + h / 2); ctx.quadraticCurveTo(x + w / 2, y, x + w, y + h / 2);
+                        ctx.quadraticCurveTo(x + w / 2, y + h, x, y + h / 2); ctx.fill();
+                        ctx.fillRect(x - w * .1, y + h * .6, w * .2, h * .2); ctx.fillRect(x + w * .9, y + h * .6, w * .2, h * .2);
                         break
                 }
                 ctx.restore();
                 if (enemy.maxHealth > 1) {
                     const healthBarWidth = enemy.width * .8,
                         healthBarHeight = 4;
-                    ctx.fillStyle = "#333";
-                    ctx.fillRect(enemy.x + enemy.width * .1, enemy.y - 8, healthBarWidth, healthBarHeight);
-                    ctx.fillStyle = "#0f0";
-                    ctx.fillRect(enemy.x + enemy.width * .1, enemy.y - 8, healthBarWidth * (enemy.health / enemy.maxHealth), healthBarHeight)
+                    ctx.fillStyle = "#333"; ctx.fillRect(enemy.x + enemy.width * .1, enemy.y - 8, healthBarWidth, healthBarHeight);
+                    ctx.fillStyle = "#0f0"; ctx.fillRect(enemy.x + enemy.width * .1, enemy.y - 8, healthBarWidth * (enemy.health / enemy.maxHealth), healthBarHeight)
                 }
             })
         }
@@ -580,58 +590,33 @@
             ctx.save();
             if (b.glowIntensity > 0) {
                 ctx.shadowColor = `rgba(255, 255, 255, ${b.glowIntensity})`;
-                ctx.shadowBlur = 20;
-                b.glowIntensity -= .05
+                ctx.shadowBlur = 20; b.glowIntensity -= .05
             }
-            ctx.fillStyle = "#900048";
-            ctx.fillRect(b.x, b.y + 20, b.width, b.height - 40);
-            ctx.fillStyle = b.color;
-            ctx.beginPath();
-            ctx.moveTo(b.x, b.y + 20);
-            ctx.lineTo(b.x + b.width / 2, b.y);
-            ctx.lineTo(b.x + b.width, b.y + 20);
-            ctx.closePath();
-            ctx.fill();
-            ctx.fillStyle = "#500028";
-            ctx.fillRect(b.x - 20, b.y + 30, 20, 50);
-            ctx.fillRect(b.x + b.width, b.y + 30, 20, 50);
-            ctx.fillStyle = "#ff1a8c";
-            ctx.beginPath();
-            ctx.arc(b.x + b.width / 2, b.y + 30, 15, 0, Math.PI * 2);
-            ctx.fill();
+            ctx.fillStyle = "#900048"; ctx.fillRect(b.x, b.y + 20, b.width, b.height - 40);
+            ctx.fillStyle = b.color; ctx.beginPath(); ctx.moveTo(b.x, b.y + 20); ctx.lineTo(b.x + b.width / 2, b.y);
+            ctx.lineTo(b.x + b.width, b.y + 20); ctx.closePath(); ctx.fill();
+            ctx.fillStyle = "#500028"; ctx.fillRect(b.x - 20, b.y + 30, 20, 50); ctx.fillRect(b.x + b.width, b.y + 30, 20, 50);
+            ctx.fillStyle = "#ff1a8c"; ctx.beginPath(); ctx.arc(b.x + b.width / 2, b.y + 30, 15, 0, Math.PI * 2); ctx.fill();
             ctx.restore();
             const barWidth = b.width;
-            ctx.fillStyle = "#333";
-            ctx.fillRect(b.x, b.y - 20, barWidth, 8);
-            ctx.fillStyle = "#f00";
-            ctx.fillRect(b.x, b.y - 20, barWidth * (b.health / b.maxHealth), 8);
-            ctx.fillStyle = "#333";
-            ctx.fillRect(b.x, b.y - 10, barWidth, 4);
-            ctx.fillStyle = "#00f";
-            ctx.fillRect(b.x, b.y - 10, barWidth * (b.shield / b.maxShield), 4)
+            ctx.fillStyle = "#333"; ctx.fillRect(b.x, b.y - 20, barWidth, 8);
+            ctx.fillStyle = "#f00"; ctx.fillRect(b.x, b.y - 20, barWidth * (b.health / b.maxHealth), 8);
+            ctx.fillStyle = "#333"; ctx.fillRect(b.x, b.y - 10, barWidth, 4);
+            ctx.fillStyle = "#00f"; ctx.fillRect(b.x, b.y - 10, barWidth * (b.shield / b.maxShield), 4)
         }
 
         function drawBullets() {
             bullets.forEach(bullet => {
-                ctx.fillStyle = "#ffff00";
-                ctx.shadowColor = "#ffff00";
-                ctx.shadowBlur = 10;
-                ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
-                ctx.shadowBlur = 0
+                ctx.fillStyle = "#ffff00"; ctx.shadowColor = "#ffff00"; ctx.shadowBlur = 10;
+                ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height); ctx.shadowBlur = 0
             });
             enemyBullets.forEach(bullet => {
                 if (bullet.laser) {
-                    ctx.fillStyle = "#ff00ff";
-                    ctx.shadowColor = "#ff00ff";
-                    ctx.shadowBlur = 15;
+                    ctx.fillStyle = "#ff00ff"; ctx.shadowColor = "#ff00ff"; ctx.shadowBlur = 15;
                     ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height)
                 } else {
-                    ctx.fillStyle = "#ff4d4d";
-                    ctx.shadowColor = "#ff4d4d";
-                    ctx.shadowBlur = 8;
-                    ctx.beginPath();
-                    ctx.arc(bullet.x + bullet.width / 2, bullet.y + bullet.height / 2, bullet.width / 2, 0, Math.PI * 2);
-                    ctx.fill()
+                    ctx.fillStyle = "#ff4d4d"; ctx.shadowColor = "#ff4d4d"; ctx.shadowBlur = 8;
+                    ctx.beginPath(); ctx.arc(bullet.x + bullet.width / 2, bullet.y + bullet.height / 2, bullet.width / 2, 0, Math.PI * 2); ctx.fill()
                 }
                 ctx.shadowBlur = 0
             })
@@ -640,24 +625,12 @@
         function drawPowerUps() {
             powerUps.forEach(pu => {
                 ctx.save();
-                ctx.shadowColor = pu.color;
-                ctx.shadowBlur = 15;
-                ctx.strokeStyle = "#fff";
-                ctx.lineWidth = 2;
-                ctx.fillStyle = pu.color;
-                const x = pu.x + pu.size / 2,
-                    y = pu.y + pu.size / 2,
-                    s = pu.size / 2;
+                ctx.shadowColor = pu.color; ctx.shadowBlur = 15; ctx.strokeStyle = "#fff"; ctx.lineWidth = 2; ctx.fillStyle = pu.color;
+                const x = pu.x + pu.size / 2, y = pu.y + pu.size / 2, s = pu.size / 2;
                 switch (pu.type) {
                     case "life":
-                        ctx.beginPath();
-                        ctx.moveTo(x, y + s / 4);
-                        ctx.arc(x - s / 2, y - s / 4, s / 2, 0, Math.PI, true);
-                        ctx.arc(x + s / 2, y - s / 4, s / 2, 0, Math.PI, true);
-                        ctx.lineTo(x, y + s);
-                        ctx.closePath();
-                        ctx.fill();
-                        ctx.stroke();
+                        ctx.beginPath(); ctx.moveTo(x, y + s / 4); ctx.arc(x - s / 2, y - s / 4, s / 2, 0, Math.PI, true);
+                        ctx.arc(x + s / 2, y - s / 4, s / 2, 0, Math.PI, true); ctx.lineTo(x, y + s); ctx.closePath(); ctx.fill(); ctx.stroke();
                         break;
                     case "score":
                         ctx.beginPath();
@@ -665,25 +638,15 @@
                             ctx.lineTo(x + s * Math.cos(i * 2 * Math.PI / 5 + Math.PI / 2), y + s * Math.sin(i * 2 * Math.PI / 5 + Math.PI / 2));
                             ctx.lineTo(x + s / 2 * Math.cos((i + .5) * 2 * Math.PI / 5 + Math.PI / 2), y + s / 2 * Math.sin((i + .5) * 2 * Math.PI / 5 + Math.PI / 2))
                         }
-                        ctx.closePath();
-                        ctx.fill();
-                        ctx.stroke();
+                        ctx.closePath(); ctx.fill(); ctx.stroke();
                         break;
                     case "shield":
-                        ctx.beginPath();
-                        ctx.moveTo(x - s, y - s);
-                        ctx.lineTo(x, y - s * 1.5);
-                        ctx.lineTo(x + s, y - s);
-                        ctx.bezierCurveTo(x + s, y + s, x, y + s * 1.2, x - s, y + s);
-                        ctx.closePath();
-                        ctx.fill();
-                        ctx.stroke();
+                        ctx.beginPath(); ctx.moveTo(x - s, y - s); ctx.lineTo(x, y - s * 1.5); ctx.lineTo(x + s, y - s);
+                        ctx.bezierCurveTo(x + s, y + s, x, y + s * 1.2, x - s, y + s); ctx.closePath(); ctx.fill(); ctx.stroke();
                         break;
                     case "weapon":
-                        ctx.font = `bold ${pu.size}px "Press Start 2P"`;
-                        ctx.textAlign = "center";
-                        ctx.textBaseline = "middle";
-                        ctx.fillText("W", x, y + 2);
+                        ctx.font = `bold ${pu.size}px "Press Start 2P"`; ctx.textAlign = "center";
+                        ctx.textBaseline = "middle"; ctx.fillText("W", x, y + 2);
                         break
                 }
                 ctx.restore()
@@ -692,11 +655,8 @@
 
         function drawStars() {
             stars.forEach(star => {
-                ctx.fillStyle = star.color;
-                ctx.globalAlpha = star.opacity * (.5 + .5 * Math.sin(star.twinkle));
-                ctx.beginPath();
-                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-                ctx.fill();
+                ctx.fillStyle = star.color; ctx.globalAlpha = star.opacity * (.5 + .5 * Math.sin(star.twinkle));
+                ctx.beginPath(); ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2); ctx.fill();
                 star.twinkle += .05
             });
             ctx.globalAlpha = 1
@@ -705,11 +665,8 @@
         function drawExplosions() {
             explosions.forEach(exp => {
                 exp.particles.forEach(p => {
-                    ctx.fillStyle = p.color;
-                    ctx.globalAlpha = exp.alpha;
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                    ctx.fill()
+                    ctx.fillStyle = p.color; ctx.globalAlpha = exp.alpha;
+                    ctx.beginPath(); ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2); ctx.fill()
                 })
             })
         }
@@ -752,7 +709,7 @@
                         lastShotTime: Date.now() + Math.random() * 5e3,
                         glowIntensity: 0,
                         spriteType: Math.floor(Math.random() * 3)
-                    });
+                    })
                 }
             }
         }
@@ -772,43 +729,23 @@
                 direction: 1,
                 lastShotTime: 0,
                 fireRate: 500,
-                glowIntensity: 0,
-                patternTimer: 0,
-                movePattern: 0,
-                shootTimer: 0,
-                laserActive: false
-            }
+                glowIntensity: 0
+            };
         }
 
         function createPowerUp(x, y) {
             if (Math.random() < .2 + level * .01) {
-                const types = [{
-                    type: "life",
-                    symbol: "♥",
-                    color: "#ff4d4d"
-                }, {
-                    type: "score",
-                    symbol: "★",
-                    color: "#ffff40"
-                }, {
-                    type: "shield",
-                    symbol: "⛨",
-                    color: "#4d94ff"
-                }, {
-                    type: "weapon",
-                    symbol: "W",
-                    color: "#ff00ff"
-                }];
+                const types = [
+                    { type: "life", symbol: "♥", color: "#ff4d4d" },
+                    { type: "score", symbol: "★", color: "#ffff40" },
+                    { type: "shield", symbol: "⛨", color: "#4d94ff" },
+                    { type: "weapon", symbol: "W", color: "#ff00ff" }
+                ];
                 const power = types[Math.floor(Math.random() * types.length)];
                 const size = 25;
                 powerUps.push({
-                    x: x - size / 2,
-                    y: y,
-                    width: size,
-                    height: size,
-                    speed: 2,
-                    size: size,
-                    ...power
+                    x: x - size / 2, y: y,
+                    width: size, height: size, speed: 2, size: size, ...power
                 });
             }
         }
@@ -818,18 +755,12 @@
             const particles = [];
             for (let i = 0; i < 15; i++) {
                 particles.push({
-                    x: x,
-                    y: y,
-                    radius: Math.random() * 3 + 1,
-                    vx: (Math.random() - .5) * 4,
-                    vy: (Math.random() - .5) * 4,
+                    x: x, y: y, radius: Math.random() * 3 + 1,
+                    vx: (Math.random() - .5) * 4, vy: (Math.random() - .5) * 4,
                     color: color
                 })
             }
-            explosions.push({
-                particles: particles,
-                alpha: 1
-            });
+            explosions.push({ particles: particles, alpha: 1 });
         }
 
         function updatePlayer() {
@@ -849,34 +780,11 @@
             if (now - player.lastShotTime > rate) {
                 playSound("shoot");
                 if (player.weaponType === "normal" || player.weaponType === "fast") {
-                    bullets.push({
-                        x: player.x + player.width / 2 - 4,
-                        y: player.y,
-                        width: 8,
-                        height: 20
-                    });
+                    bullets.push({ x: player.x + player.width / 2 - 4, y: player.y, width: 8, height: 20 });
                 } else if (player.weaponType === "spread") {
-                    bullets.push({
-                        x: player.x + player.width / 2 - 4,
-                        y: player.y,
-                        width: 8,
-                        height: 20,
-                        vx: 0
-                    });
-                    bullets.push({
-                        x: player.x,
-                        y: player.y,
-                        width: 8,
-                        height: 20,
-                        vx: -1
-                    });
-                    bullets.push({
-                        x: player.x + player.width - 8,
-                        y: player.y,
-                        width: 8,
-                        height: 20,
-                        vx: 1
-                    });
+                    bullets.push({ x: player.x + player.width / 2 - 4, y: player.y, width: 8, height: 20, vx: 0 });
+                    bullets.push({ x: player.x, y: player.y, width: 8, height: 20, vx: -1 });
+                    bullets.push({ x: player.x + player.width - 8, y: player.y, width: 8, height: 20, vx: 1 });
                 }
                 player.lastShotTime = now;
             }
@@ -889,14 +797,9 @@
                 if (b.y < 0) bullets.splice(i, 1)
             });
             enemyBullets.forEach((b, i) => {
-                if (b.laser) {
-                    b.life--;
-                    if (b.life <= 0) enemyBullets.splice(i, 1)
-                } else {
-                    b.y += 4 + level * .1;
-                    if (b.y > canvas.height) enemyBullets.splice(i, 1)
-                }
-            })
+                b.y += 4 + level * .1;
+                if (b.y > canvas.height) enemyBullets.splice(i, 1);
+            });
         }
 
         function updateEnemies() {
@@ -904,136 +807,64 @@
             enemies.forEach(e => {
                 e.x += e.speed * e.direction;
                 if (e.x < 0 || e.x + e.width > canvas.width) advance = true;
-                if (Math.random() < .001) enemyBullets.push({
-                    x: e.x + e.width / 2 - 3,
-                    y: e.y + e.height,
-                    width: 6,
-                    height: 12
-                })
+                if (Math.random() < .001) {
+                    enemyBullets.push({ x: e.x + e.width / 2 - 3, y: e.y + e.height, width: 6, height: 12, speed: 5 });
+                }
             });
-            if (advance) enemies.forEach(e => {
-                e.direction *= -1;
-                e.y += 20;
-                if (e.y + e.height > player.y) gameOver()
-            })
+            if (advance) {
+                enemies.forEach(e => {
+                    e.direction *= -1;
+                    e.y += 20;
+                    if (e.y + e.height > player.y) gameOver();
+                });
+            }
         }
 
         function updateBoss() {
             if (!boss) return;
             boss.x += boss.speed * boss.direction;
             if (boss.x < 0 || boss.x + boss.width > canvas.width) boss.direction *= -1;
-            if (Math.random() < .05) enemyBullets.push({
-                x: boss.x + Math.random() * boss.width,
-                y: boss.y + boss.height,
-                width: 8,
-                height: 16
-            })
+            if (Math.random() < .05) {
+                enemyBullets.push({ x: boss.x + Math.random() * boss.width, y: boss.y + boss.height, width: 8, height: 16, speed: 6 });
+            }
         }
 
-        function updatePowerUps() {
-            powerUps.forEach((pu, i) => {
-                pu.y += pu.speed;
-                if (pu.y > canvas.height) powerUps.splice(i, 1)
-            })
-        }
-
-        function updateStars() {
-            stars.forEach(s => {
-                s.y += s.speed;
-                if (s.y > canvas.height) {
-                    s.y = 0;
-                    s.x = Math.random() * canvas.width
-                }
-            })
-        }
-
-        function updateExplosions() {
-            explosions.forEach((exp, i) => {
-                exp.alpha -= .02;
-                exp.particles.forEach(p => {
-                    p.x += p.vx;
-                    p.y += p.vy;
-                    p.radius *= .98
-                });
-                if (exp.alpha <= 0) explosions.splice(i, 1)
-            })
-        }
-
-        function checkCollision(obj1, obj2) {
-            return obj1.x < obj2.x + obj2.width && obj1.x + obj1.width > obj2.x && obj1.y < obj2.y + obj2.height && obj1.y + obj1.height > obj2.y
-        }
+        function updatePowerUps() { powerUps.forEach((pu, i) => { pu.y += pu.speed; if (pu.y > canvas.height) powerUps.splice(i, 1) }) }
+        function updateStars() { stars.forEach(s => { s.y += s.speed; if (s.y > canvas.height) { s.y = 0; s.x = Math.random() * canvas.width } }) }
+        function updateExplosions() { explosions.forEach((exp, i) => { exp.alpha -= .02; exp.particles.forEach(p => { p.x += p.vx; p.y += p.vy; p.radius *= .98 }); if (exp.alpha <= 0) explosions.splice(i, 1) }) }
+        function checkCollision(obj1, obj2) { return obj1.x < obj2.x + obj2.width && obj1.x + obj1.width > obj2.x && obj1.y < obj2.y + obj2.height && obj1.y + obj1.height > obj2.y }
         
         function handleCollisions() {
             bullets.forEach((b, bi) => {
                 enemies.forEach((e, ei) => {
                     if (checkCollision(b, e)) {
-                        e.health--;
-                        e.glowIntensity = 1;
-                        bullets.splice(bi, 1);
-                        if (e.health <= 0) {
-                            score += 100;
-                            createPowerUp(e.x + e.width / 2, e.y + e.height / 2);
-                            enemies.splice(ei, 1);
-                            createExplosion(e.x, e.y, e.color)
-                        }
+                        e.health--; e.glowIntensity = 1; bullets.splice(bi, 1);
+                        if (e.health <= 0) { score += 100; createPowerUp(e.x + e.width / 2, e.y + e.height / 2); enemies.splice(ei, 1); createExplosion(e.x, e.y, e.color) }
                     }
                 });
                 if (boss && checkCollision(b, boss)) {
-                    if (boss.shield > 0) {
-                        boss.shield -= 5
-                    } else {
-                        boss.health -= 10
-                    }
-                    boss.glowIntensity = 1;
-                    bullets.splice(bi, 1);
-                    if (boss.health <= 0) {
-                        score += 5e3;
-                        boss = null;
-                        levelCompleted = true;
-                        createExplosion(b.x, b.y, "#ff1a8c")
-                    }
+                    if (boss.shield > 0) { boss.shield -= 5 } else { boss.health -= 10 }
+                    boss.glowIntensity = 1; bullets.splice(bi, 1);
+                    if (boss.health <= 0) { score += 5000; boss = null; createExplosion(b.x, b.y, "#ff1a8c") }
                 }
             });
             enemyBullets.forEach((b, bi) => {
                 if (checkCollision(b, player)) {
-                    if (player.shield > 0) {
-                        player.shield = 0
-                    } else {
-                        lives--;
-                        if (lives <= 0) {
-                            gameOver()
-                        } else {
-                            player.shield = 180
-                        }
+                    if (player.shield > 0) { player.shield = 0 } else {
+                        lives--; if (lives <= 0) { gameOver() } else { player.shield = 180 }
                     }
-                    updateLivesDisplay();
-                    enemyBullets.splice(bi, 1);
-                    playSound("playerHit")
+                    updateLivesDisplay(); enemyBullets.splice(bi, 1); playSound("playerHit")
                 }
             });
-            powerUps.forEach((pu, pui) => {
-                if (checkCollision(player, pu)) {
-                    applyPowerUpEffect(pu.type);
-                    powerUps.splice(pui, 1)
-                }
-            })
+            powerUps.forEach((pu, pui) => { if (checkCollision(player, pu)) { applyPowerUpEffect(pu.type); powerUps.splice(pui, 1) } })
         }
 
         function applyPowerUpEffect(type) {
             playSound("powerUp");
             switch (type) {
-                case "life":
-                    if (lives < 6) {
-                        lives++;
-                    }
-                    updateLivesDisplay();
-                    break;
-                case "score":
-                    score += 500;
-                    break;
-                case "shield":
-                    player.shield += 1200;
-                    break;
+                case "life": if (lives < 6) { lives++; } updateLivesDisplay(); break;
+                case "score": score += 500; break;
+                case "shield": player.shield += 1200; break;
                 case "weapon":
                     if (player.weaponType === "normal") player.weaponType = "spread";
                     else if (player.weaponType === "spread") player.weaponType = "fast";
@@ -1044,81 +875,37 @@
 
         function nextLevel() {
             level++;
-            enemies = [];
-            enemyBullets = [];
-            powerUps = [];
             isBossLevel = level % 5 === 0;
-            if (isBossLevel) {
-                createBoss();
-            } else {
-                createEnemies();
-            }
+            if (isBossLevel) { createBoss(); } else { createEnemies(); }
             levelCompleted = false;
         }
 
-        function updateHUD() {
-            document.getElementById("playerDisplay").textContent = playerName;
-            document.getElementById("scoreDisplay").textContent = Math.floor(score);
-            document.getElementById("levelDisplay").textContent = level;
-            updateLivesDisplay();
-            const weaponNames = {
-                normal: "Κανονικό",
-                spread: "Διασποράς",
-                fast: "Γρήγορο"
-            };
-            document.getElementById("weaponType").textContent = weaponNames[player.weaponType]
-        }
-
-        function updateLivesDisplay() {
-            const livesContainer = document.getElementById("livesContainer");
-            livesContainer.innerHTML = "";
-            for (let i = 0; i < lives; i++) {
-                livesContainer.innerHTML += "❤️"
-            }
-        }
-
-        function hideAllOverlays() {
-            document.querySelectorAll(".menu-container, .pause-overlay").forEach(el => el.classList.add("hidden"))
-        }
+        function updateHUD() { document.getElementById("playerDisplay").textContent = playerName; document.getElementById("scoreDisplay").textContent = Math.floor(score); document.getElementById("levelDisplay").textContent = level; updateLivesDisplay(); const weaponNames = { normal: "Κανονικό", spread: "Διασποράς", fast: "Γρήγορο" }; document.getElementById("weaponType").textContent = weaponNames[player.weaponType] }
+        function updateLivesDisplay() { const livesContainer = document.getElementById("livesContainer"); livesContainer.innerHTML = ""; for (let i = 0; i < lives; i++) { livesContainer.innerHTML += "❤️" } }
+        function hideAllOverlays() { document.querySelectorAll(".menu-container, .pause-overlay").forEach(el => el.classList.add("hidden")) }
         
         function startGame() {
             playerName = document.getElementById("playerName").value.trim() || "Παίκτης 1";
-            score = 0;
-            level = 1;
-            lives = 3;
-            player.shield = 0;
-            player.weaponType = "normal";
-            bullets = [];
-            enemyBullets = [];
-            enemies = [];
-            powerUps = [];
-            boss = null;
-            isBossLevel = false;
-            levelCompleted = false;
-            transitionTimer = 0;
+            score = 0; level = 1; lives = 3; player.shield = 0; player.weaponType = "normal";
+            bullets = []; enemyBullets = []; enemies = []; powerUps = []; boss = null;
+            isBossLevel = false; levelCompleted = false; transitionTimer = 0;
             hideAllOverlays();
             document.getElementById("hud").classList.remove("hidden");
             document.getElementById("gameTitleHeader").classList.remove("hidden");
             document.getElementById("weaponIndicator").classList.remove("hidden");
             const isTouchDevice = navigator.maxTouchPoints > 0 || "ontouchstart" in window;
-            if (isTouchDevice) {
-                document.getElementById("virtualControls").classList.remove("hidden");
-                document.getElementById("gameControls").classList.add("hidden")
-            } else {
-                document.getElementById("gameControls").classList.remove("hidden");
-                document.getElementById("virtualControls").classList.add("hidden")
-            }
+            if (isTouchDevice) { document.getElementById("virtualControls").classList.remove("hidden"); document.getElementById("gameControls").classList.add("hidden") }
+            else { document.getElementById("gameControls").classList.remove("hidden"); document.getElementById("virtualControls").classList.add("hidden") }
             initAudio();
             createBackgroundMusic();
             createStars();
             createEnemies();
             updateHUD();
-            gameState = "playing"
+            gameState = "playing";
         }
 
         function endSequenceCleanup() {
-            gameState = "finished";
-            stopBackgroundMusic();
+            gameState = "finished"; stopBackgroundMusic();
             document.getElementById("hud").classList.add("hidden");
             document.getElementById("gameControls").classList.add("hidden");
             document.getElementById("virtualControls").classList.add("hidden");
@@ -1126,163 +913,66 @@
             saveHighScore(playerName, score);
         }
 
-        function gameOver() {
-            endSequenceCleanup();
-            document.getElementById("finalScoreDisplay").textContent = Math.floor(score);
-            document.getElementById("gameOverOverlay").classList.remove("hidden")
-        }
-
-        function gameWon() {
-            endSequenceCleanup();
-            document.getElementById("finalWinScoreDisplay").textContent = Math.floor(score);
-            document.getElementById("gameWonOverlay").classList.remove("hidden")
-        }
-
+        function gameOver() { endSequenceCleanup(); document.getElementById("finalScoreDisplay").textContent = Math.floor(score); document.getElementById("gameOverOverlay").classList.remove("hidden") }
+        function gameWon() { endSequenceCleanup(); document.getElementById("finalWinScoreDisplay").textContent = Math.floor(score); document.getElementById("gameWonOverlay").classList.remove("hidden") }
+        
         function showMainMenu() {
             hideAllOverlays();
             document.getElementById("gameTitleHeader").classList.remove("hidden");
-            document.getElementById("mainMenu").classList.remove("hidden")
+            document.getElementById("mainMenu").classList.remove("hidden");
         }
-
-        function showNameInput() {
-            hideAllOverlays();
-            document.getElementById("nameInput").classList.remove("hidden")
-        }
-
-        function showInstructions() {
-            hideAllOverlays();
-            document.getElementById("instructions").classList.remove("hidden")
-        }
-
-        function showHighScores() {
-            displayHighScores();
-            hideAllOverlays();
-            document.getElementById("highScores").classList.remove("hidden")
-        }
-
+        function showNameInput() { hideAllOverlays(); document.getElementById("nameInput").classList.remove("hidden") }
+        function showInstructions() { hideAllOverlays(); document.getElementById("instructions").classList.remove("hidden") }
+        function showHighScores() { displayHighScores(); hideAllOverlays(); document.getElementById("highScores").classList.remove("hidden") }
         function pauseGame() {
             if (gameState === "playing") {
                 gameState = "paused";
-                document.getElementById("pauseOverlay").classList.remove("hidden")
+                document.getElementById("pauseOverlay").classList.remove("hidden");
             } else if (gameState === "paused") {
                 gameState = "playing";
-                document.getElementById("pauseOverlay").classList.add("hidden")
+                document.getElementById("pauseOverlay").classList.add("hidden");
             }
         }
-        
         function returnToMenu() {
             gameState = "menu";
             document.getElementById("gameTitleHeader").classList.remove("hidden");
             hideAllOverlays();
             document.getElementById("mainMenu").classList.remove("hidden");
         }
-        
-        function toggleMute() {
-            isMuted = !isMuted;
-            document.getElementById("muteBtn").textContent = isMuted ? "Ήχος" : "Σίγαση";
-            if (isMuted) {
-                stopBackgroundMusic()
-            } else if (gameState === 'playing') {
-                createBackgroundMusic()
-            }
-        }
-
-        function saveHighScore(name, score) {
-            const s = getHighScores();
-            s.push({
-                name,
-                score: Math.floor(score)
-            });
-            s.sort((a, b) => b.score - a.score);
-            localStorage.setItem("defenderOfEarthScoresGR", JSON.stringify(s.slice(0, 10)))
-        }
-
-        function getHighScores() {
-            return JSON.parse(localStorage.getItem("defenderOfEarthScoresGR")) || []
-        }
-
-        function displayHighScores() {
-            const scores = getHighScores();
-            const list = document.getElementById("scoresList");
-            list.innerHTML = "";
-            if (scores.length === 0) {
-                list.innerHTML = '<p style="text-align: center;">Δεν υπάρχουν ακόμα High Scores.</p>';
-                return
-            }
-            scores.forEach((entry, i) => {
-                const div = document.createElement("div");
-                div.className = "score-item";
-                div.innerHTML = `<span>${i + 1}. ${entry.name}</span><span>${entry.score}</span>`;
-                list.appendChild(div)
-            })
-        }
-
-        function clearHighScores() {
-            if (confirm("Είστε σίγουροι ότι θέλετε να διαγράψετε όλα τα High Scores;")) {
-                localStorage.removeItem("defenderOfEarthScoresGR");
-                displayHighScores()
-            }
-        }
+        function toggleMute() { isMuted = !isMuted; document.getElementById("muteBtn").textContent = isMuted ? "Ήχος" : "Σίγαση"; if (isMuted) { stopBackgroundMusic() } else if (gameState === 'playing') { createBackgroundMusic() } }
+        function saveHighScore(name, score) { const s = getHighScores(); s.push({ name, score: Math.floor(score) }); s.sort((a, b) => b.score - a.score); localStorage.setItem("defenderOfEarthScoresGR", JSON.stringify(s.slice(0, 10))) }
+        function getHighScores() { return JSON.parse(localStorage.getItem("defenderOfEarthScoresGR")) || [] }
+        function displayHighScores() { const scores = getHighScores(); const list = document.getElementById("scoresList"); list.innerHTML = ""; if (scores.length === 0) { list.innerHTML = '<p style="text-align: center;">Δεν υπάρχουν ακόμα High Scores.</p>'; return } scores.forEach((entry, i) => { const div = document.createElement("div"); div.className = "score-item"; div.innerHTML = `<span>${i + 1}. ${entry.name}</span><span>${entry.score}</span>`; list.appendChild(div) }) }
+        function clearHighScores() { if (confirm("Είστε σίγουροι ότι θέλετε να διαγράψετε όλα τα High Scores;")) { localStorage.removeItem("defenderOfEarthScoresGR"); displayHighScores() } }
         
         function setupControls() {
             const isTouchDevice = navigator.maxTouchPoints > 0 || "ontouchstart" in window;
             if (isTouchDevice) {
                 document.getElementById("gameControls").style.display = "none";
-                const leftBtn = document.getElementById("leftBtn"),
-                    rightBtn = document.getElementById("rightBtn"),
-                    shootBtn = document.getElementById("shootBtn");
-                const start = e => {
-                    e.preventDefault();
-                    if (e.currentTarget.id === "leftBtn") keys.ArrowLeft = true;
-                    if (e.currentTarget.id === "rightBtn") keys.ArrowRight = true;
-                    if (e.currentTarget.id === "shootBtn") keys[" "] = true
-                };
-                const end = e => {
-                    e.preventDefault();
-                    if (e.currentTarget.id === "leftBtn") keys.ArrowLeft = false;
-                    if (e.currentTarget.id === "rightBtn") keys.ArrowRight = false;
-                    if (e.currentTarget.id === "shootBtn") keys[" "] = false
-                };
-                leftBtn.addEventListener("touchstart", start, {
-                    passive: false
-                });
-                leftBtn.addEventListener("touchend", end, {
-                    passive: false
-                });
-                rightBtn.addEventListener("touchstart", start, {
-                    passive: false
-                });
-                rightBtn.addEventListener("touchend", end, {
-                    passive: false
-                });
-                shootBtn.addEventListener("touchstart", start, {
-                    passive: false
-                });
-                shootBtn.addEventListener("touchend", end, {
-                    passive: false
-                });
+                const leftBtn = document.getElementById("leftBtn"), rightBtn = document.getElementById("rightBtn"), shootBtn = document.getElementById("shootBtn");
+                const start = e => { e.preventDefault(); if (e.currentTarget.id === "leftBtn") keys.ArrowLeft = true; if (e.currentTarget.id === "rightBtn") keys.ArrowRight = true; if (e.currentTarget.id === "shootBtn") keys[" "] = true };
+                const end = e => { e.preventDefault(); if (e.currentTarget.id === "leftBtn") keys.ArrowLeft = false; if (e.currentTarget.id === "rightBtn") keys.ArrowRight = false; if (e.currentTarget.id === "shootBtn") keys[" "] = false };
+                leftBtn.addEventListener("touchstart", start, { passive: false }); leftBtn.addEventListener("touchend", end, { passive: false });
+                rightBtn.addEventListener("touchstart", start, { passive: false }); rightBtn.addEventListener("touchend", end, { passive: false });
+                shootBtn.addEventListener("touchstart", start, { passive: false }); shootBtn.addEventListener("touchend", end, { passive: false });
             } else {
                 document.getElementById("virtualControls").style.display = "none";
             }
         }
         
         window.addEventListener("keydown", e => {
-            keys[e.key] = true;
-            keys[e.code] = true;
-            if (e.key.toLowerCase() === "p") {
-                if (gameState === "playing" || gameState === "paused") pauseGame()
-            }
-            if (e.key === "Escape") {
-                if (gameState !== "menu" && gameState !== "finished") returnToMenu()
-            }
+            keys[e.key] = true; keys[e.code] = true;
+            if (e.key.toLowerCase() === "p") { if (gameState === "playing" || gameState === "paused") pauseGame() }
+            if (e.key === "Escape") { if (gameState !== "menu" && gameState !== "finished") returnToMenu() }
         });
-
-        window.addEventListener("keyup", e => {
-            keys[e.key] = false;
-            keys[e.code] = false;
-        });
+        window.addEventListener("keyup", e => { keys[e.key] = false; keys[e.code] = false; });
 
         function gameLoop(currentTime) {
+            if (gameState === 'menu' || gameState === 'finished') {
+                requestAnimationFrame(gameLoop);
+                return;
+            }
+
             lastFrameTime = currentTime;
             if (gameState === "playing") {
                 updatePlayer();
@@ -1294,10 +984,10 @@
                 handleCollisions();
                 updateHUD();
 
-                if ((!isBossLevel && enemies.length === 0) || (isBossLevel && !boss && levelCompleted)) {
-                    if (transitionTimer <= 0) {
-                        levelCompleted = true;
-                        transitionTimer = 120;
+                if ((!isBossLevel && enemies.length === 0) || (isBossLevel && boss === null)) {
+                    if (!levelCompleted) {
+                         levelCompleted = true;
+                         transitionTimer = 120;
                     }
                 }
                 
@@ -1316,7 +1006,7 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             updateStars();
             drawStars();
-
+            
             if (gameState === "playing" || gameState === "paused") {
                 drawEnemies();
                 drawBoss();
@@ -1325,6 +1015,7 @@
                 drawPlayer();
                 drawExplosions();
             }
+            
             requestAnimationFrame(gameLoop);
         }
 
